@@ -32,6 +32,7 @@ stages:
 
 - stage: Deploy_Stage
   displayName: Deploy Stage
+  dependsOn: Build_Stage
   jobs:
   - job: Deploy_Job
     displayName: Deploy Job
