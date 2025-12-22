@@ -29,3 +29,15 @@ stages:
         targetPath: '$(Build.SourcesDirectory)/Build'
         artifact: 'todo-ui'
         publishLocation: 'pipeline'
+
+- stage: Deploy_Stage
+  displayName: Deploy Stage
+  jobs:
+  - job: Deploy_Job
+    displayName: Deploy Job
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'todo-ui'
+        targetPath: '$(Agent.BuildDirectory)'
