@@ -41,3 +41,18 @@ stages:
         buildType: 'current'
         artifactName: 'todo-ui'
         targetPath: '$(Agent.BuildDirectory)'
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'frontend-todo-ui'
+        runOptions: 'commands'
+        commands: |
+          sudo chmod -R 777 /var/www/html
+          sudo rm -rf /var/www/html/*
+        readyTimeout: '20000'
+    - task: CopyFilesOverSSH@0
+      inputs:
+        sshEndpoint: 'frontend-todo-ui'
+        sourceFolder: '$(Agent.BuildDirectory)'
+        contents: '**'
+        targetFolder: '/var/www/html'
+        readyTimeout: '20000'
