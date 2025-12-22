@@ -24,3 +24,8 @@ stages:
         command: 'custom'
         workingDir: '$(Build.SourcesDirectory)'
         customCommand: 'run build'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.SourcesDirectory)/Build'
+        artifact: 'todo-ui'
+        publishLocation: 'pipeline'
