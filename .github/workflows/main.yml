@@ -1,6 +1,11 @@
 name: todo-ui-pipeline
 run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
 on: workflow_dispatch
+env:
+  MY_VAR: Hi there! My name is
+  FIRST_NAME: Mona
+  MIDDLE_NAME: The
+  LAST_NAME: Octocat
 jobs:
   Build:
     name: buildjob
@@ -8,5 +13,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v6.0.1
+      
     - name: print a greeting
-      run: echo "hello world"
+      run: |
+        echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME.
+        
