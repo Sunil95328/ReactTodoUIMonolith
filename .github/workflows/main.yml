@@ -1,6 +1,17 @@
 name: todo-ui-pipeline
-run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
-on: workflow_dispatch
+run-name: Deploy to ${{ inputs.environment }} by @${{ github.actor }}
+on: 
+  workflow_dispatch:
+    inputs:
+      environment:
+      description: Select environment
+      required: true
+      default: dev
+      type: choice
+      options:
+        - dev
+        - qa
+        - prod
 env:
   MY_VAR: Hi there! My name is
   FIRST_NAME: Mona
@@ -16,5 +27,5 @@ jobs:
       
     - name: print a greeting
       run: |
-        echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME.
+        echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME ${{ inputs.environment }}.
         
