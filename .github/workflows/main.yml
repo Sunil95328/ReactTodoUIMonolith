@@ -1,6 +1,8 @@
 name: todo-ui-pipeline
+
 run-name: Deploy to ${{ inputs.environment }} by @${{ github.actor }}
-on: 
+
+on:
   workflow_dispatch:
     inputs:
       environment:
@@ -12,23 +14,24 @@ on:
           - dev
           - qa
           - prod
+
 jobs:
   Build:
     name: buildjob
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v6.0.1
-      
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v6.1.0
-      with:
-        node-version: 16.x
 
-    - name: Install dependencies
-      run: npm install
-        
-    - name: Build the project
-      run: npm run build
-        
-        
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
