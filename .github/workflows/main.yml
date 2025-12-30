@@ -12,8 +12,6 @@ on:
           - dev
           - qa
           - prod
-env:
-  github.actor: Sunil
 jobs:
   Build:
     name: buildjob
@@ -28,9 +26,9 @@ jobs:
         node-version: 16.x
 
     - name: Install dependencies
-      run: |
-        npm install
+      run: npm install
+        
     - name: Build the project
-      run: |
-        npm run build
+      run: npm run build
+        
         
