@@ -13,10 +13,7 @@ on:
           - qa
           - prod
 env:
-  MY_VAR: Hi there! My name is
-  FIRST_NAME: Mona
-  MIDDLE_NAME: The
-  LAST_NAME: Octocat
+  github.actor: Sunil
 jobs:
   Build:
     name: buildjob
