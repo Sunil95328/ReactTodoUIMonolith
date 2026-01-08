@@ -1,8 +1,59 @@
 trigger: none 
 pool: Default
 
-steps: 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: 'Write-Host "Hello World"'
+stages:
+- stage: Build_Stage
+  displayName: Build Stage
+  jobs:
+  - job: Build_Job
+    displayName: Build Job
+    steps:
+    - task: NodeTool@0
+      displayName: NodeInstall
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '16.x'
+    - task: Npm@1
+      displayName: NPM Install
+      inputs:
+        command: 'install'
+        workingDir: '$(Build.SourcesDirectory)'
+    - task: Npm@1
+      displayName: NPM Build
+      inputs:
+        command: 'custom'
+        workingDir: '$(Build.SourcesDirectory)'
+        customCommand: 'run build'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.SourcesDirectory)/Build'
+        artifact: 'todo-ui'
+        publishLocation: 'pipeline'
+
+- stage: Deploy_Stage
+  displayName: Deploy Stage
+  dependsOn: Build_Stage
+  jobs:
+  - job: Deploy_Job
+    displayName: Deploy Job
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'todo-ui'
+        targetPath: '$(Agent.BuildDirectory)'
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'frontend-todo-ui'
+        runOptions: 'commands'
+        commands: |
+          sudo chmod -R 777 /var/www/html
+          sudo rm -rf /var/www/html/*
+        readyTimeout: '20000'
+    - task: CopyFilesOverSSH@0
+      inputs:
+        sshEndpoint: 'frontend-todo-ui'
+        sourceFolder: '$(Agent.BuildDirectory)'
+        contents: '**'
+        targetFolder: '/var/www/html'
+        readyTimeout: '20000'
